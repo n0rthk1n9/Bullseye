@@ -17,10 +17,16 @@ struct ContentView: View {
             BackgroundView(game: $game)
             VStack {
                 InstructionsView(game: $game)
-                    .padding(.bottom, 100)
-                HitMeButton(game: $game, sliderValue: $sliderValue, alertIsVisible: $alertIsVisible)
+                    .padding(.bottom, alertIsVisible ? 0 : 100)
+                if alertIsVisible {
+                    PointsView(sliderValue: $sliderValue, game: $game, alertIsVisible: $alertIsVisible)
+                } else {
+                    HitMeButton(game: $game, sliderValue: $sliderValue, alertIsVisible: $alertIsVisible)
+                }
             }
-            SliderView(sliderValue: $sliderValue)
+            if !alertIsVisible {
+                SliderView(sliderValue: $sliderValue)
+            }
         }
     }
 }
@@ -76,22 +82,6 @@ struct HitMeButton: View {
         .cornerRadius(21.0)
         .bold()
         .font(.title3)
-        .alert(
-            "Hello there!",
-            isPresented: $alertIsVisible,
-            actions: {
-                Button("Awesome!") {
-                    game.startNewRound(points: game.points(sliderValue: Int(sliderValue)))
-                }
-            },
-            message: {
-                let roundedValue = Int(sliderValue.rounded())
-                Text("""
-                    The slider's value is \(roundedValue).
-                    You scored \(game.points(sliderValue: roundedValue)) this round
-                """)
-            }
-        )
     }
 }
 
@@ -99,6 +89,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
         ContentView()
+            .previewInterfaceOrientation(.landscapeRight)
             .preferredColorScheme(.dark)
     }
 }
