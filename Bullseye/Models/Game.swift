@@ -28,4 +28,10 @@ struct Game {
         round = round + 1
         target = Int.random(in: 1...100)
     }
+    
+    mutating func restart() {
+        score = 0
+        round = 1
+        target = Int.random(in: 1...100)
+    }
 }
