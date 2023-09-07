@@ -17,61 +17,75 @@ struct ContentView: View {
             Color("BackgroundColor")
                 .ignoresSafeArea()
             VStack {
-                Text("🎯🎯🎯\nPut the Bullseye as close as you can to".uppercased())
-                    .bold()
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(4.0)
-                    .font(.footnote)
-                    .kerning(2.0)
-                    .padding(.horizontal, 30)
-                    .foregroundColor(Color("TextColor"))
-                Text(String(game.target))
-                    .fontWeight(.black)
-                    .font(.largeTitle)
-                    .kerning(-1.0)
-                    .foregroundColor(Color("TextColor"))
-                HStack {
-                    Text("0")
-                        .bold()
-                        .foregroundColor(Color("TextColor"))
-                    Slider(value: $sliderValue, in: 1.0...100.0)
-                    Text("100")
-                        .bold()
-                        .foregroundColor(Color("TextColor"))
-                }
-                .padding()
-                Button("Hit me".uppercased()) {
-                    alertIsVisible = true
-                }
-                .padding(20.0)
-                .background(
-                    ZStack {
-                        Color("ButtonColor")
-                        LinearGradient(colors: [Color.white.opacity(0.3), Color.clear], startPoint: .top, endPoint: .bottom)
-                    }
-                )
-                .foregroundColor(.white)
-                .cornerRadius(21.0)
-                .bold()
-                .font(.title3)
-                .alert(
-                    "Hello there!",
-                    isPresented: $alertIsVisible,
-                    actions: {
-                        Button("Hit me") {
-                            print("Alert closed")
-                        }
-                    },
-                    message: {
-                        let roundedValue = Int(sliderValue.rounded())
-                        Text("""
-                            The slider's value is \(roundedValue).
-                            You scored \(game.points(sliderValue: roundedValue)) this round
-                        """)
-                    }
-                )
+                InstructionsView(game: $game)
+                SliderView(sliderValue: $sliderValue)
+                HitMeButton(game: $game, sliderValue: $sliderValue, alertIsVisible: $alertIsVisible)
             }
         }
+    }
+}
+
+struct InstructionsView: View {
+    @Binding var game: Game
+    
+    var body: some View {
+        VStack {
+            InstructionText(text: "🎯🎯🎯\nPut the Bullseye as close as you can to")
+                .padding(.horizontal, 30)
+            BigNumberText(text: String(game.target))
+        }
+    }
+}
+
+struct SliderView: View {
+    @Binding var sliderValue: Double
+    
+    var body: some View {
+        HStack {
+            SmallNumberText(text: "0")
+            Slider(value: $sliderValue, in: 1.0...100.0)
+            SmallNumberText(text: "100")
+        }
+        .padding()
+    }
+}
+
+struct HitMeButton: View {
+    @Binding var game: Game
+    @Binding var sliderValue: Double
+    @Binding var alertIsVisible: Bool
+    
+    var body: some View {
+        Button("Hit me".uppercased()) {
+            alertIsVisible = true
+        }
+        .padding(20.0)
+        .background(
+            ZStack {
+                Color("ButtonColor")
+                LinearGradient(colors: [Color.white.opacity(0.3), Color.clear], startPoint: .top, endPoint: .bottom)
+            }
+        )
+        .foregroundColor(.white)
+        .cornerRadius(21.0)
+        .bold()
+        .font(.title3)
+        .alert(
+            "Hello there!",
+            isPresented: $alertIsVisible,
+            actions: {
+                Button("Hit me") {
+                    print("Alert closed")
+                }
+            },
+            message: {
+                let roundedValue = Int(sliderValue.rounded())
+                Text("""
+                    The slider's value is \(roundedValue).
+                    You scored \(game.points(sliderValue: roundedValue)) this round
+                """)
+            }
+        )
     }
 }
 
