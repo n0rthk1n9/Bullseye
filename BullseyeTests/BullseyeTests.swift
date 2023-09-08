@@ -5,8 +5,8 @@
 //  Created by Jan Armbrust on 29.08.23.
 //
 
-import XCTest
 @testable import Bullseye
+import XCTest
 
 final class BullseyeTests: XCTestCase {
     var game: Game!
@@ -62,5 +62,15 @@ final class BullseyeTests: XCTestCase {
         game.restart()
         XCTAssertEqual(game.score, 0)
         XCTAssertEqual(game.round, 1)
+    }
+    
+    func testLeaderboard() {
+        game.startNewRound(points: 100)
+        XCTAssertEqual(game.leaderboardEntries.count, 1)
+        XCTAssertEqual(game.leaderboardEntries[0].score, 100)
+        game.startNewRound(points: 200)
+        XCTAssertEqual(game.leaderboardEntries.count, 2)
+        XCTAssertEqual(game.leaderboardEntries[0].score, 200)
+        XCTAssertEqual(game.leaderboardEntries[1].score, 100)
     }
 }
