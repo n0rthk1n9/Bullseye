@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RoundedImageViewStroked: View {
     var systemName: String
-    
+
     var body: some View {
         Image(systemName: systemName)
             .font(.title)
@@ -24,7 +24,7 @@ struct RoundedImageViewStroked: View {
 
 struct RoundedImageViewFilled: View {
     var systemName: String
-    
+
     var body: some View {
         ZStack {
             Circle()
@@ -33,20 +33,20 @@ struct RoundedImageViewFilled: View {
             Image(systemName: systemName)
                 .font(.title)
                 .foregroundColor(Color("ButtonFilledTextColor"))
-            .frame(width: 56.0, height: 56.0)
+                .frame(width: 56.0, height: 56.0)
         }
     }
 }
 
 struct RoundedTextView: View {
     var text: String
-    
+
     var body: some View {
         Text(text)
             .font(.title3)
             .bold()
             .foregroundColor(Color("TextColor"))
-            .frame(width: Constants.General.roundedRectViewWidth, height: Constants.General.roundedRectViewHeight)
+            .frame(width: Constants.General.roundedViewLength, height: Constants.General.roundedRectViewHeight)
             .overlay(
                 Circle()
                     .strokeBorder(Color("RoundedTextStrokeColor"), lineWidth: Constants.General.strokeWidth)
@@ -56,7 +56,7 @@ struct RoundedTextView: View {
 
 struct RoundRectTextView: View {
     var text: String
-    
+
     var body: some View {
         Text(text)
             .font(.title3)
